@@ -41,6 +41,9 @@ def collect_window_features(
     raw_by_subject: dict[str, dict[int, dict[int, list[float]]]] = defaultdict(
         lambda: defaultdict(lambda: defaultdict(list))
     )
+    raw_beta_by_subject: dict[str, dict[int, dict[int, list[float]]]] = defaultdict(
+        lambda: defaultdict(lambda: defaultdict(list))
+    )
     psd_examples: dict[str, dict[int, tuple[np.ndarray, np.ndarray, np.ndarray]]] = {}
 
     paths = list_segments(data_dir, subjects=subjects, classes=[1, 2])
@@ -61,6 +64,7 @@ def collect_window_features(
             for sw in sub_windows:
                 bp = relative_bandpowers(sw, nperseg=nperseg, fs=FS)
                 raw_by_subject[subject][w_sec][class_id].append(bp["rel_alpha"])
+                raw_beta_by_subject[subject][w_sec][class_id].append(bp["rel_beta"])
 
     for w_sec in windows_sec:
         w_key = str(w_sec)
@@ -69,12 +73,16 @@ def collect_window_features(
         for subject in subjects:
             relax = np.array(raw_by_subject[subject][w_sec][1])
             focus = np.array(raw_by_subject[subject][w_sec][2])
+            relax_beta = np.array(raw_beta_by_subject[subject][w_sec][1])
+            focus_beta = np.array(raw_beta_by_subject[subject][w_sec][2])
             d = cohens_d(relax, focus)
+            d_beta = cohens_d(relax_beta, focus_beta)
             cv_alpha = coefficient_of_variation(
                 np.concatenate([relax, focus]) if len(relax) + len(focus) > 0 else np.array([0.0])
             )
             summary[w_key][subject] = {
                 "cohens_d_rel_alpha": round(d, 4),
+                "cohens_d_rel_beta": round(d_beta, 4),
                 "cv_alpha": round(cv_alpha, 4),
                 "delta_f": round(delta_f, 4),
                 "mean_rel_alpha_relax": round(float(np.mean(relax)), 4) if len(relax) else 0.0,
@@ -206,10 +214,27 @@ def plot_cohens_d_vs_window(summary: dict, windows_sec: list[int], out_path: Pat
     plt.close(fig)
 
 
+def plot_cohens_d_beta_vs_window(summary: dict, windows_sec: list[int], out_path: Path) -> None:
+    """Plot Cohen's d for relative beta power vs window length for each subject."""
+    fig, ax = plt.subplots(figsize=(8, 5))
+    for subject in DEFAULT_SUBJECTS:
+        ds = [summary[str(w)][subject]["cohens_d_rel_beta"] for w in windows_sec]
+        ax.plot(windows_sec, ds, "o-", label=subject)
+    ax.axhline(0, color="gray", linestyle="--", linewidth=0.8)
+    ax.set_xlabel("Window length W (s)")
+    ax.set_ylabel("Cohen's d (Relax vs Focus, rel_β)")
+    ax.set_title("Effect Size (β band) vs Window Length")
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig(out_path, format="pdf")
+    plt.close(fig)
+
+
 def plot_bme_comparison(summary: dict, windows_sec: list[int], out_path: Path) -> None:
     """Bar chart comparing six BME course group windows vs this study."""
     bme_d_illustrative = [0.35, 0.45, 0.50, 0.55, 0.60, 0.65]
-    bme_window_labels = ["2s", "3s", "4s", "4s", "5s", "6s"]
+    # g1–g6 window lengths per session3 BME table; g4 estimated (see report §1.1)
+    bme_window_labels = ["5s", "2s", "2s", "4s", "6s", "4s"]
 
     our_ds = [
         abs(np.mean([summary[str(w)][s]["cohens_d_rel_alpha"] for s in DEFAULT_SUBJECTS]))
@@ -254,6 +279,7 @@ def run_experiment(
     plot_alpha_beta_boxplot(data_dir, subjects, out_dir / "alpha_beta_boxplot.pdf")
     plot_resolution_tradeoff(summary, windows_sec, out_dir / "resolution_tradeoff.pdf")
     plot_cohens_d_vs_window(summary, windows_sec, out_dir / "cohens_d_vs_window.pdf")
+    plot_cohens_d_beta_vs_window(summary, windows_sec, out_dir / "cohens_d_beta_vs_window.pdf")
     plot_bme_comparison(summary, windows_sec, out_dir / "bme_window_comparison.pdf")
 
     with (out_dir / "summary.json").open("w", encoding="utf-8") as f:
@@ -276,7 +302,8 @@ def main() -> None:
         for subj in args.subjects:
             s = summary[str(w)][subj]
             print(
-                f"  W={w}s {subj}: d={s['cohens_d_rel_alpha']:.3f}, "
+                f"  W={w}s {subj}: d_α={s['cohens_d_rel_alpha']:.3f}, "
+                f"d_β={s['cohens_d_rel_beta']:.3f}, "
                 f"CV={s['cv_alpha']:.3f}, Δf={s['delta_f']:.3f} Hz"
             )
 

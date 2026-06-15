@@ -2,7 +2,6 @@
   "1": {
     "b12901014": {
       "cohens_d_rel_alpha": 0.2862,
-      "cohens_d_rel_beta": -0.175,
       "cv_alpha": 0.5181,
       "delta_f": 1.0,
       "mean_rel_alpha_relax": 0.2779,
@@ -12,7 +11,6 @@
     },
     "b12901151": {
       "cohens_d_rel_alpha": 0.1079,
-      "cohens_d_rel_beta": -0.4698,
       "cv_alpha": 0.5239,
       "delta_f": 1.0,
       "mean_rel_alpha_relax": 0.1679,
@@ -24,7 +22,6 @@
   "2": {
     "b12901014": {
       "cohens_d_rel_alpha": 0.3821,
-      "cohens_d_rel_beta": -0.1748,
       "cv_alpha": 0.4432,
       "delta_f": 0.5,
       "mean_rel_alpha_relax": 0.2842,
@@ -34,7 +31,6 @@
     },
     "b12901151": {
       "cohens_d_rel_alpha": 0.097,
-      "cohens_d_rel_beta": -0.5782,
       "cv_alpha": 0.4422,
       "delta_f": 0.5,
       "mean_rel_alpha_relax": 0.1662,
@@ -46,7 +42,6 @@
   "4": {
     "b12901014": {
       "cohens_d_rel_alpha": 0.4933,
-      "cohens_d_rel_beta": -0.0337,
       "cv_alpha": 0.3849,
       "delta_f": 0.25,
       "mean_rel_alpha_relax": 0.2826,
@@ -56,7 +51,6 @@
     },
     "b12901151": {
       "cohens_d_rel_alpha": 0.0714,
-      "cohens_d_rel_beta": -0.6481,
       "cv_alpha": 0.3575,
       "delta_f": 0.25,
       "mean_rel_alpha_relax": 0.163,
@@ -68,7 +62,6 @@
   "6": {
     "b12901014": {
       "cohens_d_rel_alpha": 0.5919,
-      "cohens_d_rel_beta": 0.0518,
       "cv_alpha": 0.356,
       "delta_f": 0.1667,
       "mean_rel_alpha_relax": 0.284,
@@ -78,7 +71,6 @@
     },
     "b12901151": {
       "cohens_d_rel_alpha": 0.0624,
-      "cohens_d_rel_beta": -0.7329,
       "cv_alpha": 0.328,
       "delta_f": 0.1667,
       "mean_rel_alpha_relax": 0.1628,
@@ -90,7 +82,6 @@
   "8": {
     "b12901014": {
       "cohens_d_rel_alpha": 0.6628,
-      "cohens_d_rel_beta": 0.1268,
       "cv_alpha": 0.3389,
       "delta_f": 0.125,
       "mean_rel_alpha_relax": 0.2849,
@@ -100,7 +91,6 @@
     },
     "b12901151": {
       "cohens_d_rel_alpha": 0.0618,
-      "cohens_d_rel_beta": -0.7071,
       "cv_alpha": 0.3177,
       "delta_f": 0.125,
       "mean_rel_alpha_relax": 0.1613,

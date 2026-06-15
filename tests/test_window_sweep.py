@@ -48,6 +48,7 @@ def test_window_sweep_generates_figures(tmp_path: Path):
         "alpha_beta_boxplot.pdf",
         "resolution_tradeoff.pdf",
         "cohens_d_vs_window.pdf",
+        "cohens_d_beta_vs_window.pdf",
         "bme_window_comparison.pdf",
     ]
     for name in expected_pdfs:
@@ -59,3 +60,4 @@ def test_window_sweep_generates_figures(tmp_path: Path):
     assert loaded == summary
     assert "1" in loaded
     assert "cohens_d_rel_alpha" in loaded["1"]["b12901014"]
+    assert "cohens_d_rel_beta" in loaded["1"]["b12901014"]
