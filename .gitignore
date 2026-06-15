@@ -1,0 +1,16 @@
+data/
+report/
+docs/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.aux
+*.log
+*.out
+*.synctex.gz
+.DS_Store
+Thumbs.db
+figures/summary_session*_baseline.json
+scripts/
